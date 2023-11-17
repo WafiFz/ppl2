@@ -2,74 +2,88 @@
 
 namespace App\Models;
 
-use App\Models\Presenters\UserPresenter;
-use App\Models\Traits\HasHashedMediaTrait;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\Permission\Traits\HasRoles;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements HasMedia, MustVerifyEmail
+class User extends Authenticatable
 {
-    use HasFactory;
-    use HasHashedMediaTrait;
-    use HasRoles;
-    use Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
     use SoftDeletes;
-    use UserPresenter;
 
-    protected $guarded = [
-        'id',
-        'updated_at',
-        '_token',
-        '_method',
-        'password_confirmation',
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'first_name',
+        'last_name',
+        'username',
+        'email',
+        'mobile',
+        'gender',
+        'date_of_birth',
+        'password',
+        'avatar',
+        'status',
+        'role',
     ];
+    
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-        'date_of_birth' => 'datetime',
-        'email_verified_at' => 'datetime',
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
-    protected $hidden = [
-        'password', 'remember_token',
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
     protected static function boot()
     {
         parent::boot();
 
-        // create a event to happen on creating
-        static::creating(function ($table) {
-            $table->created_by = Auth::id();
-        });
+        static::created(function ($user) {
 
-        // create a event to happen on updating
-        static::updating(function ($table) {
-            $table->updated_by = Auth::id();
-        });
+            $userprofile = new Userprofile();
+            $userprofile->user_id = $user->id;
+            $userprofile->name = $user->name;
+            $userprofile->first_name = $user->first_name;
+            $userprofile->last_name = $user->last_name;
+            $userprofile->username = $user->username;
+            $userprofile->email = $user->email;
+            $userprofile->mobile = $user->mobile;
+            $userprofile->gender = $user->gender;
+            $userprofile->date_of_birth = $user->date_of_birth;
+            $userprofile->avatar = $user->avatar;
+            $userprofile->status = ($user->status > 0) ? $user->status : 0;
+            $userprofile->save();
 
-        // create a event to happen on saving
-        static::saving(function ($table) {
-            $table->updated_by = Auth::id();
-        });
-
-        // create a event to happen on deleting
-        static::deleting(function ($table) {
-            $table->deleted_by = Auth::id();
-            $table->save();
         });
     }
+
+    /**
+    *
+    *  RELATION
+    *
+    * ---------------------------------------------------------------------
+    */
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -80,7 +94,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function profile()
     {
@@ -88,31 +102,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function userprofile()
     {
         return $this->hasOne('App\Models\Userprofile');
     }
 
-    /**
-     * Get the list of users related to the current User.
-     *
-     * @return [array] roels
-     */
-    public function getRolesListAttribute()
-    {
-        return array_map('intval', $this->roles->pluck('id')->toArray());
-    }
-
-    /**
-     * Route notifications for the Slack channel.
-     *
-     * @param  \Illuminate\Notifications\Notification  $notification
-     * @return string
-     */
-    public function routeNotificationForSlack($notification)
-    {
-        return env('SLACK_NOTIFICATION_WEBHOOK');
-    }
 }

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('username')->nullable();
             $table->string('email')->unique();
             $table->string('mobile')->nullable();
@@ -25,10 +25,8 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('avatar')->nullable()->default('img/default-avatar.jpg');
             $table->tinyInteger('status')->default(1)->unsigned();
+            $table->enum('role', ['user', 'admin'])->default('user');
             $table->rememberToken();
-            $table->integer('created_by')->unsigned()->nullable();
-            $table->integer('updated_by')->unsigned()->nullable();
-            $table->integer('deleted_by')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

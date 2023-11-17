@@ -1,0 +1,129 @@
+openapi: 3.0.0
+info:
+  title: API invits.co
+  version: 1.0.0
+  description: Merupakan API pembuatan undangan digital
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    User:
+      $ref: './user.yaml#/components/schemas/User'
+    UserProfile:
+      $ref: './user.yaml#/components/schemas/UserProfile'
+    Package:
+      $ref: './package.yaml#/components/schemas/Package'
+    Theme:
+      $ref: './theme.yaml#/components/schemas/Theme'
+    Order:
+      $ref: './order.yaml#/components/schemas/Order'
+    Wedding:
+      $ref: './wedding.yaml#/components/schemas/Wedding'
+    Invitation:
+      $ref: './invitation.yaml#/components/schemas/Invitation'
+    Wish:
+      $ref: './wish.yaml#/components/schemas/Wish'
+    Guest:
+      $ref: './guest.yaml#/components/schemas/Guest'
+
+paths:
+  /api/login:
+    $ref: './auth.yaml#/Login'
+
+  /api/register:
+    $ref: './auth.yaml#/Register'
+
+  /api/logout:
+    $ref: './auth.yaml#/Logout'
+  
+  /api/social-login/{provider}:
+    $ref: './auth.yaml#/SocialLogin'
+
+  /api/users:
+    $ref: './user.yaml#/Users'
+
+  /api/users/{id}:
+    $ref: './user.yaml#/User_id'
+  
+  /api/users/{id}/change-password:
+    $ref: './user.yaml#/ChangePassword'
+
+  /api/packages:
+    $ref: './package.yaml#/Packages'
+
+  /api/packages/{id}:
+    $ref: './package.yaml#/Package_id'
+  
+  /api/themes:
+    $ref: './theme.yaml#/Themes'
+
+  /api/themes/{id}:
+    $ref: './theme.yaml#/Theme_id'
+  
+  /api/orders:
+    $ref: './order.yaml#/Orders'
+
+  /api/orders/{id}:
+    $ref: './order.yaml#/Order_id'
+  
+  /api/orders-user/{user_id}:
+    $ref: './order.yaml#/OrderUser_UserID'
+  
+  /api/payments/total:
+    $ref: './payment.yaml#/Total'
+  
+  /api/payments/total/paid:
+    $ref: './payment.yaml#/TotalPaid'
+  
+  /api/payments/total/unpaid:
+    $ref: './payment.yaml#/TotalUnpaid'
+
+  /api/invitations:
+    $ref: './invitation.yaml#/Invitations'
+
+  /api/invitations/{id}:
+    $ref: './invitation.yaml#/Invitation_id'
+  
+  # /api/weddings:
+  #   $ref: './wedding.yaml#/Weddings'
+
+  # /api/weddings/{id}:
+  #   $ref: './wedding.yaml#/Wedding_id'
+  
+  /api/weddings-order/{order_id}:
+    $ref: './wedding.yaml#/WeddingOrder_OrderID'
+  
+  /api/weddings-invitation/{slug}:
+    $ref: './wedding.yaml#/WeddingInvitation_Slug'
+  
+  /api/wishes:
+    $ref: './wish.yaml#/Wishes'
+
+  /api/wishes/{id}:
+    $ref: './wish.yaml#/Wish_id'
+
+  /api/wishes-wedding/{wedding_id}:
+    $ref: './wish.yaml#/WishesWedding_WeddingID'
+
+  /api/rsvps:
+    $ref: './rsvp.yaml#/Rsvps'
+
+  /api/rsvps/{id}:
+    $ref: './rsvp.yaml#/Rsvp_id'
+  
+  /api/rsvps-invitation/{invitation_id}:
+    $ref: './rsvp.yaml#/RsvpInvitation_InvitationID'
+
+  /api/guests:
+    $ref: './guest.yaml#/Guests'
+
+  /api/guests/{id}:
+    $ref: './guest.yaml#/Guest_id'
+  
+  /api/guests-invitation/{invitation_id}:
+    $ref: './guest.yaml#/GuestInvitation_InvitationID'
+  
+
