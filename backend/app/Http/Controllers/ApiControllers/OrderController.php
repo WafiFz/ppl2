@@ -194,9 +194,6 @@ class OrderController extends Controller
                     ]);    
                 }
             }
-            else{
-                return $this->jsonResponse(null, 'invalid key', [], false, 422);
-            }
         } catch (Exception $e) {
             DB::rollback();
             dd($e);

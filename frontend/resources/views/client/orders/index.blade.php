@@ -59,7 +59,7 @@
                             </td>
                             @if($order->status != "UNPAID")
                                 <td class="px-6 py-4">
-                                    <a href="{{ route('ordersDetail', $order->id) }}"
+                                    <a href="{{ route('client.ordersDetail', $order->id) }}"
                                         class="font-medium text-brand-pink hover:underline">Details</a>
                                 </td>
                                 <td class="px-6 py-4">
