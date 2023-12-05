@@ -14,14 +14,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $response = Http::withToken(session('api_token'))->get(env('API_URL').'orders-user/'.session('user')['id']);
-        if($response->failed()) {
-            return back()->withErrors("Couldn't load orders");
-        }
-        $json = $response->object();
+        $orders_response = Http::withToken(session('api_token'))->get(env('API_URL').'orders');
 
-        $title = "Order List";
-        $orders = collect($json->data->orders);
+        if($orders_response->failed()) {
+            return back()->with(["error" => "Couldn't load data"]);
+        }
+
+        $title = "All Orders";
+        $orders = collect($orders_response->object()->data->orders);
 
         $perPage = 14;
         $currentPage = request('page', 1);
@@ -29,10 +29,10 @@ class OrderController extends Controller
         $slicedData = $orders->slice($startIndex, $perPage);
 
         $data = new LengthAwarePaginator($slicedData, $orders->count(), $perPage, $currentPage, [
-            'path' => route('client.orders'),
+            'path' => route('admin.orders'),
         ]);
 
-        return view("client.orders.index", compact('title', 'data'));
+        return view('admin.order', compact("title", "data"));
     }
 
     /**
@@ -92,6 +92,28 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function userOrders(Request $request) {
+        $response = Http::withToken(session('api_token'))->get(env('API_URL').'orders-user/'.session('user')['id']);
+        if($response->failed()) {
+            return back()->withErrors("Couldn't load orders");
+        }
+        $json = $response->object();
+
+        $title = "Order List";
+        $orders = collect($json->data->orders);
+
+        $perPage = 14;
+        $currentPage = request('page', 1);
+        $startIndex = ($currentPage - 1) * $perPage;
+        $slicedData = $orders->slice($startIndex, $perPage);
+
+        $data = new LengthAwarePaginator($slicedData, $orders->count(), $perPage, $currentPage, [
+            'path' => route('client.orders'),
+        ]);
+
+        return view("client.orders.index", compact('title', 'data'));
     }
 
     /**
@@ -169,28 +191,25 @@ class OrderController extends Controller
 
         $theme_json = $theme_response->json();
         $theme = collect($theme_json['data']['theme']);
-
+        
         $package_response = Http::get(env('API_URL').'packages/'.$theme["package_id"]);
         if ($theme_response->failed()) {
             return back()->withErrors("Couldn't load package");
         }
-
+        
         $package_json = $package_response->json();
         $package = collect($package_json['data']['package']);
         
-        
-
-        $order_response = Http::acceptJson()->withToken(session('api_token'))->post(env('API_URL').'orders/', [
+        $order_response = Http::withToken(session('api_token'))->post(env('API_URL').'orders', [
             'user_id' => session('user.id'),
             'theme_id'  => $theme['id'],
         ]);
         
         if($order_response->failed()) {
-            if($order_response->status(401)) {// 401 if not logged in
+            if($order_response->status() == 401) {// 401 if not logged in
                 return redirect('login');
-                // TODO redirect to login
             } 
-            return back()->withErrors("Couldn't make order");;
+            return back()->withErrors("Couldn't make order");
         }
 
         $order_json = $order_response->json();
