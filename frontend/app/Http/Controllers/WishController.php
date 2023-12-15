@@ -35,7 +35,6 @@ class WishController extends Controller
             'anonymous' => $request->anonymous ?? false,
             'wedding_id' => decode_id($request->wedding_id),
         ]);
-        dd($response->object());
 
         if($response->failed()){
             $errors = $response->object()->errors;
