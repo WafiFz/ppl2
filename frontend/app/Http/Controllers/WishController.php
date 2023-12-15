@@ -28,14 +28,14 @@ class WishController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->except("_token"));
         $response = Http::post(env('API_URL').'wishes', [
             'name'  => $request->name,
-            'from' => null,
+            'from' => 'Tamu',
             'wish'  => $request->wish,
             'anonymous' => $request->anonymous ?? false,
             'wedding_id' => decode_id($request->wedding_id),
         ]);
+        dd($response->object());
 
         if($response->failed()){
             $errors = $response->object()->errors;
