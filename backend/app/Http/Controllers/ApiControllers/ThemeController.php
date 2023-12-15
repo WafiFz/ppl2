@@ -83,7 +83,7 @@ class ThemeController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'package_id' => 'numeric',
+            'package_id' => 'numeric|exists:packages,id',
             'name' => 'string',
             'price' => 'numeric',
             'description' => 'string',

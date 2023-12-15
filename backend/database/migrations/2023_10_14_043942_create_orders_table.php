@@ -19,7 +19,8 @@ return new class extends Migration
             // Foreign Key
             $table->foreignId('user_id');       $table->foreign('user_id')->references('id')->on('users');
             $table->foreignId('package_id');    $table->foreign('package_id')->references('id')->on('packages');
-            $table->foreignId('theme_id');      $table->foreign('theme_id')->references('id')->on('themes');
+            $table->foreignId('theme_id');      
+            // $table->foreign('theme_id')->references('id')->on('themes');
 
             // Default
             $table->integer('created_by')->unsigned()->nullable();
