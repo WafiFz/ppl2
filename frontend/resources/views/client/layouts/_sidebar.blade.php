@@ -9,7 +9,7 @@
 		<div class="flex content-between">
 			<div class="w-full px-3 py-6">
                 <img src="{{ asset('img/logo/logo-light.svg') }}" class="inline-block mr-2" alt="" width="40">
-                <strong>Client Area</strong>
+                <strong>{{session('user.role') == 'user'? 'Client' : 'Admin'}} Area</strong>
             </div>
 			<a
 				@click.prevent="handleClose()"
