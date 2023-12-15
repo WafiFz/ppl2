@@ -102,7 +102,17 @@ class GuestController extends Controller
     {
         $input = $request->except('_token');
 
+        $response = Http::withToken(session('api_token'))->get(env('API_URL').'guests/'.decode_id($id));
+        if($response->failed()){
+            $errors = $response->json()["errors"];
+            return back()->withErrors($errors ?? null)->withInput();
+        }
+        
+        $input['invitation_id'] = $response->object()->data->guest->invitation_id;
+
+        
         $response = Http::withToken(session('api_token'))->put(env('API_URL').'guests/'.decode_id($id), $input);
+        // dd($response->object());
         if($response->failed()){
             $errors = $response->json()["errors"];
             return back()->withErrors($errors ?? null)->withInput();
