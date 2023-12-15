@@ -30,19 +30,19 @@
                 </div>
                 <div class="hidden sm:block sm:ml-6">
                     <div class="flex space-x-4 text-gray-600 group-[.nav-dark]:text-white">
-                        <a href="#paket"
+                        <a href="{{ route('home').'#paket' }}"
                             class="px-3 py-2 text-base font-medium transition duration-300 ease-out border-b-2 border-transparent hover:border-brand-purple-500 group-[.nav-dark]:hover:border-white">
                             Paket
                         </a>
-                        <a href="#portfolio"
+                        <a href="{{ route('home').'#portfolio' }}"
                             class="px-3 py-2 text-base font-medium transition duration-300 ease-out border-b-2 border-transparent hover:border-brand-purple-500 group-[.nav-dark]:hover:border-white">
                             Portfolio
                         </a>
-                        <a href="#tema"
+                        <a href="{{ route('home').'#tema' }}"
                             class="px-3 py-2 text-base font-medium transition duration-300 ease-out border-b-2 border-transparent hover:border-brand-purple-500 group-[.nav-dark]:hover:border-white">
                             Tema
                         </a>
-                        <a href="#fitur"
+                        <a href="{{ route('home').'#fitur' }}"
                             class="px-3 py-2 text-base font-medium transition duration-300 ease-out border-b-2 border-transparent hover:border-brand-purple-500 group-[.nav-dark]:hover:border-white">
                             Fitur
                         </a>
@@ -51,7 +51,7 @@
             </div>
             <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div class="relative ml-3" x-data="{ isUserMenuOpen: false }">
-                    <div class="flex items-center flex-row gap-2">
+                    <div class="flex flex-row items-center gap-2">
                         <x-button-a href="{{ route('order.index') }}"
                             class="invisible px-6 tracking-normal text-white capitalize transition-colors duration-200 transform !rounded-full bg-brand-purple-500 group-[.nav-dark]:border border-white hover:bg-brand-yellow-500 hover:text-black md:visible">
                             <span class="mx-1">Pesan Sekarang</span>
@@ -59,10 +59,10 @@
                         @if(session()->has('api_token'))
                         <button @click="isUserMenuOpen = !isUserMenuOpen" @keydown.escape="isUserMenuOpen = false"
                             type="button"
-                            class="flex white w-10 h-10 text-sm transition duration-300 ease-out bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-cyan-800 focus:ring-white"
+                            class="flex w-10 h-10 text-sm transition duration-300 ease-out bg-gray-800 rounded-full white focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-cyan-800 focus:ring-white"
                             id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                             <span class="sr-only">{{ __('Open main menu') }}</span>
-                            <img class=" border border-transparent rounded-full hover:border-cyan-600"
+                            <img class="border border-transparent rounded-full hover:border-cyan-600"
                                 src="{{ asset(session('user.avatar') ?? 'img/default-avatar.jpg') }}" alt="User">
                         </button>
                         @else
@@ -117,19 +117,19 @@
         x-transition:leave="transition ease-in duration-75 transform" x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95">
         <div class="px-2 pt-2 pb-3 space-y-1 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
-            <a href=""
+            <a href="{{ route('home').'#paket' }}"
                 class="block px-3 py-2 text-base font-medium text-gray-500 rounded-md">
                 Paket
             </a>
-            <a href=""
+            <a href="{{ route('home').'#portfolio' }}"
                 class="block px-3 py-2 text-base font-medium text-gray-500 rounded-md">
                 Portfolio
             </a>
-            <a href=""
+            <a href="{{ route('home').'#tema' }}"
                 class="block px-3 py-2 text-base font-medium text-gray-500 rounded-md">
                 Tema
             </a>
-            <a href=""
+            <a href="{{ route('home').'#fitur' }}"
                 class="block px-3 py-2 text-base font-medium text-gray-500 rounded-md">
                 Fitur
             </a>
